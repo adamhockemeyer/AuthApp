@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AuthApp.Pages.SettingsPage" xmlns:b="clr-namespace:AuthApp.Pages;assembly=AuthApp" xmlns:vm="clr-namespace:AuthApp.ViewModels;assembly=AuthApp" x:TypeArguments="vm:SettingsViewModel" xmlns:converters="clr-namespace:AuthApp.Converters;assembly=AuthApp" Title="Settings">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:IsNotNullConverter x:Key="isNotNull">
+             </converters:IsNotNullConverter>
+            <converters:HexStringToColorConverter x:Key="stringColor">
+            </converters:HexStringToColorConverter>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout BackgroundColor="{StaticResource blueColor}" IsVisible="{Binding Name, Converter={StaticResource isNotNull}}" Padding="20">
+                <Label Text="{Binding Name}" HorizontalTextAlignment="Center" TextColor="White" FontSize="14" FontAttributes="Bold" />
+                <Label Text="{Binding Email}" HorizontalTextAlignment="Center" TextColor="White" Font="10" />
+            </StackLayout>
+            <ScrollView>
+                <TableView Intent="Settings">
+                    <TableRoot>
+                        <TableSection Title="Account">
+                            <ViewCell>
+                                <Button Text="{Binding SignInOutText}" TextColor="{Binding SignInOutTextColor, Converter={StaticResource stringColor}}" Command="{Binding SignInOutCommand}" />
+                            </ViewCell>
+                        </TableSection>
+                    </TableRoot>
+                </TableView>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</b:BaseContentPage>

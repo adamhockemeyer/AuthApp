@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AuthApp.Pages.MasterPage" xmlns:b="clr-namespace:AuthApp.Pages;assembly=AuthApp" xmlns:vm="clr-namespace:AuthApp.ViewModels;assembly=AuthApp" x:TypeArguments="vm:MasterViewModel" xmlns:converters="clr-namespace:AuthApp.Converters;assembly=AuthApp" xmlns:imageResource="clr-namespace:AuthApp.Helpers;assembly=AuthApp" xmlns:views="clr-namespace:AuthApp.Views;assembly=AuthApp" Icon="hamburger.png"
+    Title="Menu">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InvertBooleanConverter x:Key="invertBoolean">
+            </converters:InvertBooleanConverter>
+            <converters:IsNotNullConverter x:Key="isNotNull">
+            </converters:IsNotNullConverter>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="FillAndExpand" Padding="0,50,0,0" Spacing="0">
+            <views:SVGImage Source="resource://AuthApp.Resources.Images.generic_logo.svg" WidthRequest="200" />
+            <StackLayout Margin="0,20,0,20" Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="5" Spacing="0">
+                <ContentView BackgroundColor="{StaticResource orangeColor}" HorizontalOptions="FillAndExpand" />
+                <ContentView BackgroundColor="{StaticResource darkGrayColor}" HorizontalOptions="FillAndExpand" />
+                <ContentView BackgroundColor="{StaticResource blueColor}" HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+            <!-- PNG Logo Code instead of SVG -->
+            <!--            <Image Source="{imageResource:ImageResource AuthApp.Resources.Images.logo.png}" HeightRequest="125"  Aspect="AspectFit" />-->
+            <ContentView Margin="0,0,0,0">
+                <StackLayout Orientation="Vertical">
+                    <StackLayout Orientation="Horizontal" IsVisible="{Binding Name, Converter={StaticResource isNotNull}}">
+                        <Label Text="Welcome" FontSize="12" TextColor="{StaticResource darkGrayColor}" Margin="20,0,0,0" />
+                        <Label Text="{Binding Name, StringFormat='{0}!'}" FontSize="12" TextColor="{StaticResource darkGrayColor}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical">
+                        <Label Text="Menu" TextColor="{StaticResource orangeColor}" Margin="20,20,0,30" FontSize="20" FontAttributes="Bold" />
+                        <ListView x:Name="listView" ItemsSource="{Binding MenuItems}" SelectedItem="{Binding SelectedItem}" VerticalOptions="FillAndExpand" SeparatorVisibility="None" BackgroundColor="Transparent">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell Height="80">
+                                        <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
+                                            <ContentView WidthRequest="3" BackgroundColor="{StaticResource orangeColor}" IsVisible="{Binding Active}" />
+                                            <ContentView WidthRequest="3" BackgroundColor="Transparent" IsVisible="{Binding Active, Converter={StaticResource invertBoolean}}" />
+                                            <views:SVGImage Source="{Binding IconName}" Margin="10,0,10,0" WidthRequest="20" Color="{StaticResource blueColor}" />
+                                            <Label Text="{Binding Title}" FontSize="19" VerticalTextAlignment="Center" TextColor="{StaticResource darkGrayColor}" />
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
+                </StackLayout>
+            </ContentView>
+            <ContentView Padding="10" BackgroundColor="{StaticResource blueColor}">
+                <Label Text="©2018 Techi Technology Corporation&#xA;All rights reserved" TextColor="White" FontSize="12" Margin="0,0,0,5" HorizontalTextAlignment="Center" />
+            </ContentView>
+        </StackLayout>
+    </ContentPage.Content>
+</b:BaseContentPage>

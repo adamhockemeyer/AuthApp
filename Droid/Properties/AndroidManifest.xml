@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.example.AuthApp">
+    <uses-sdk android:minSdkVersion="15" />
+    <application android:label="AuthApp">
+        <!-- Required for MSAL Authentication -->
+        <activity android:name="microsoft.identity.client.BrowserTabActivity">
+            <intent-filter> 
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" /> 
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="msalbce81670-6944-407a-9cdb-97094bfa655a" android:host="auth" />
+            </intent-filter> 
+        </activity>
+    </application>
+</manifest>

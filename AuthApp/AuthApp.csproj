@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="2.5.0.280555" />
+    <PackageReference Include="Autofac" Version="4.6.2" />
+    <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.3.4" />
+    <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.3.4" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="1.1.2-preview0008" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\" />
+    <Folder Include="Pages\Base\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Models\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="ViewModels\Base\" />
+    <Folder Include="Converters\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Resources\Images\" />
+    <Folder Include="Views\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\Interface\" />
+    <Folder Include="Constants\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Pages\MasterPage.xaml.cs">
+      <DependentUpon>MasterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\TasksPage.xaml.cs">
+      <DependentUpon>TaskPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\ReportIssuePage.xaml.cs">
+      <DependentUpon>ReportIssuePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\TaskEntryPage.xaml.cs">
+      <DependentUpon>TaskEntryPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Images\home.svg" />
+    <None Remove="Resources\Images\logo_squares.svg" />
+    <None Remove="Resources\Images\generic_logo.svg" />
+    <None Remove="Resources\Images\tasks.svg" />
+    <None Remove="Resources\Images\settings.svg" />
+    <None Remove="Resources\Images\approval.svg" />
+    <None Remove="Resources\Images\search.svg" />
+    <None Remove="Resources\Images\pencil_writing.svg" />
+    <None Remove="Resources\Images\warning.svg" />
+    <None Remove="Resources\Images\cartography.svg" />
+    <None Remove="Resources\Images\cartography.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\home.svg" />
+    <EmbeddedResource Include="Resources\Images\generic_logo.svg" />
+    <EmbeddedResource Include="Resources\Images\tasks.svg" />
+    <EmbeddedResource Include="Resources\Images\settings.svg" />
+    <EmbeddedResource Include="Resources\Images\approval.svg" />
+    <EmbeddedResource Include="Resources\Images\search.svg" />
+    <EmbeddedResource Include="Resources\Images\pencil_writing.svg" />
+    <EmbeddedResource Include="Resources\Images\warning.svg" />
+    <EmbeddedResource Include="Resources\Images\cartography.png" />
+  </ItemGroup>
+</Project>

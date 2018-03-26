@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AuthApp.Pages.HomePage" xmlns:b="clr-namespace:AuthApp.Pages;assembly=AuthApp" xmlns:vm="clr-namespace:AuthApp.ViewModels;assembly=AuthApp" x:TypeArguments="vm:HomeViewModel" Title="Home" xmlns:views="clr-namespace:AuthApp.Views;assembly=AuthApp" xmlns:imageResource="clr-namespace:AuthApp.Helpers;assembly=AuthApp">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <!-- Background Image -->
+           <Image AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,.2,1,.5" Opacity="0.3" Source="{imageResource:ImageResource AuthApp.Resources.Images.cartography.png}" VerticalOptions="CenterAndExpand"  Aspect="AspectFit" />
+           <!-- Logo/Header -->
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,.2" VerticalOptions="FillAndExpand" Spacing="0">
+                <views:SVGImage Source="resource://AuthApp.Resources.Images.generic_logo.svg" WidthRequest="100" />
+                <StackLayout Margin="0,20,0,20" Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="5" Spacing="0">
+                    <ContentView BackgroundColor="{StaticResource orangeColor}" HorizontalOptions="FillAndExpand" />
+                    <ContentView BackgroundColor="{StaticResource darkGrayColor}" HorizontalOptions="FillAndExpand" />
+                    <ContentView BackgroundColor="{StaticResource blueColor}" HorizontalOptions="FillAndExpand" />
+                </StackLayout>
+            </StackLayout>
+            <!-- Main Content -->
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,.9,1,1" VerticalOptions="EndAndExpand" Spacing="0">
+                <ScrollView Orientation="Vertical">
+                    <Grid RowSpacing="10" ColumnSpacing="10" Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <!-- Approvals -->
+                        <Frame Grid.Row="0" Grid.Column="0" CornerRadius="5" HasShadow="false" BackgroundColor="#107896">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OnPageSelectedCommand}" CommandParameter="TasksPage" />
+                            </Frame.GestureRecognizers>
+                            <StackLayout VerticalOptions="FillAndExpand">
+                                <views:SVGImage Source="resource://AuthApp.Resources.Images.tasks.svg" WidthRequest="30" Color="White" />
+                                <Label Text="Tasks" TextColor="White" HorizontalTextAlignment="Center" />
+                            </StackLayout>
+                        </Frame>
+                        <!-- Search -->
+                        <Frame Grid.Row="0" Grid.Column="1" CornerRadius="5" HasShadow="false" BackgroundColor="#C2571A">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OnPageSelectedCommand}" CommandParameter="SearchPage" />
+                            </Frame.GestureRecognizers>
+                            <StackLayout VerticalOptions="FillAndExpand">
+                                <views:SVGImage Source="resource://AuthApp.Resources.Images.search.svg" WidthRequest="30" Color="White" />
+                                <Label Text="Search" TextColor="White" HorizontalTextAlignment="Center" />
+                            </StackLayout>
+                        </Frame>
+                        <!-- Order Entry -->
+                        <Frame Grid.Row="1" Grid.Column="0" CornerRadius="5" HasShadow="false" BackgroundColor="#829356">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OnPageSelectedCommand}" CommandParameter="TaskEntryPage" />
+                            </Frame.GestureRecognizers>
+                            <StackLayout VerticalOptions="FillAndExpand">
+                                <views:SVGImage Source="resource://AuthApp.Resources.Images.pencil_writing.svg" WidthRequest="30" Color="White" />
+                                <Label Text="Task Entry" TextColor="White" HorizontalTextAlignment="Center" />
+                            </StackLayout>
+                        </Frame>
+                        <!-- Report Issue -->
+                        <Frame Grid.Row="1" Grid.Column="1" CornerRadius="5" HasShadow="false" BackgroundColor="#9A2617">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OnPageSelectedCommand}" CommandParameter="ReportIssuePage" />
+                            </Frame.GestureRecognizers>
+                            <StackLayout VerticalOptions="FillAndExpand">
+                                <views:SVGImage Source="resource://AuthApp.Resources.Images.warning.svg" WidthRequest="30" Color="White" />
+                                <Label Text="Report Issue" TextColor="White" HorizontalTextAlignment="Center" />
+                            </StackLayout>
+                        </Frame>
+                    </Grid>
+                </ScrollView>
+            </StackLayout>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</b:BaseContentPage>
