@@ -11,6 +11,8 @@
     <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.3.4" />
     <PackageReference Include="Microsoft.Identity.Client" Version="1.1.2-preview0008" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
+    <PackageReference Include="libphonenumber-csharp" Version="8.9.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\" />
@@ -27,6 +29,9 @@
     <Folder Include="Services\" />
     <Folder Include="Services\Interface\" />
     <Folder Include="Constants\" />
+    <Folder Include="Services\Data\" />
+    <Folder Include="Effects\" />
+    <Folder Include="Behaviors\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Pages\MasterPage.xaml.cs">
@@ -74,5 +79,8 @@
     <EmbeddedResource Include="Resources\Images\pencil_writing.svg" />
     <EmbeddedResource Include="Resources\Images\warning.svg" />
     <EmbeddedResource Include="Resources\Images\cartography.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AuthApp.Common\AuthApp.Common.csproj" />
   </ItemGroup>
 </Project>

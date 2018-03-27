@@ -6,6 +6,8 @@ using AuthApp.ViewModels;
 using AuthApp.Services;
 using AuthApp.Pages;
 
+using AuthApp.Services.Data;
+
 namespace AuthApp
 {
     public static class ContainerRegistration
@@ -19,6 +21,8 @@ namespace AuthApp
             builder.RegisterType<NavigationService>().As<INavigationService>().SingleInstance();
             builder.RegisterType<LoggerService>().As<ILoggerService>().SingleInstance();
             builder.RegisterType<AuthenticationService>().As<IAuthenticationService>().SingleInstance();
+
+            builder.RegisterType<TasksDataService>();
 
             // ViewModels
             builder.RegisterType<HomeViewModel>();
