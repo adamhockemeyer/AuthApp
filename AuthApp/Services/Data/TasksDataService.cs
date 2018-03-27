@@ -15,6 +15,7 @@ namespace AuthApp.Services.Data
             _authService = authService;
 
             SetBaseAddress(DataServices.BASE_URL);
+            SetHeaderValue("x-functions-key", DataServices.FUNCTION_AUTHENTICATION_KEY);
             ShowLoadingMessage(true);
         }
 

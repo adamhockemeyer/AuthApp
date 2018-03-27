@@ -45,17 +45,41 @@ namespace AuthApp.Services.Data
             return this;
         }
 
+        public BaseDataService SetHeaderValue(string name, string value)
+        {
+            HttpClient.DefaultRequestHeaders.Remove(name);
+
+            HttpClient.DefaultRequestHeaders.Add(name, value);
+
+            return this;
+        }
+
         protected async Task<T> GetDataAsync<T>(string endpoint)
         {
+            if(!Plugin.Connectivity.CrossConnectivity.IsSupported || !Plugin.Connectivity.CrossConnectivity.Current.IsConnected)
+            {
+                Acr.UserDialogs.UserDialogs.Instance.Toast("No connectivity", TimeSpan.FromSeconds(3));
+                return default(T);
+            }
+
             if (_showLoading)
                 Acr.UserDialogs.UserDialogs.Instance.ShowLoading(_loadingMessage);
 
-            var response = await HttpClient.GetAsync(endpoint);
+            HttpResponseMessage response = null;
+
+            try
+            {
+                response = await HttpClient.GetAsync(endpoint);
+            }
+            catch (Exception ex)
+            {
+                Acr.UserDialogs.UserDialogs.Instance.Toast(ex.Message, TimeSpan.FromSeconds(3));
+            }
 
             if(_showLoading)
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
 
-            if(response.IsSuccessStatusCode)
+            if(response != null && response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
 
