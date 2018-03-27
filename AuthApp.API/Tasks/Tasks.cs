@@ -6,7 +6,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 
-//using AuthApp.Common.Models;
+using AuthApp.Common.Models;
 using System.Net;
 using System.Security.Claims;
 
@@ -27,7 +27,7 @@ namespace AuthApp.API.Tasks
         )
         {
 
-            //var auth = await Helpers.Security.ValidateTokenAsync(req.Headers.Authorization);
+            var auth = await Helpers.Security.ValidateTokenAsync(req.Headers.Authorization);
 
 
             // Dummy Data - change out code for a call to your backend data store.
@@ -100,24 +100,6 @@ namespace AuthApp.API.Tasks
             return req.CreateResponse<List<TaskItem>>(HttpStatusCode.OK, _data);
         }
 
-        public class TaskItem
-        {
-            public string Id { get; set; }
-            public string Title { get; set; }
-            public string Description { get; set; }
-            public string Type { get; set; }
 
-            public string CreatorName { get; set; }
-            public string CreatorId { get; set; }
-
-            public DateTimeOffset CreatedOn { get; set; }
-            public DateTimeOffset? CompletedOn { get; set; }
-
-
-
-            public TaskItem()
-            {
-            }
-        }
     }
 }

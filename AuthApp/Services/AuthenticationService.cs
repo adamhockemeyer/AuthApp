@@ -23,11 +23,17 @@ namespace AuthApp.Services
         /// </summary>
         UIParent UiParent;
         AuthenticationResult authResult;
+        string[] authResultScope;
         UserProfile userProfile;
         // Register your app at: https://apps.dev.microsoft.com
         // Then enter the ClientID/Application ID below.
         string ClientID = "bce81670-6944-407a-9cdb-97094bfa655a";
-        string[] Scopes = { "User.Read" };
+        // Access the Microsoft Graph
+        string[] GraphScopes = { "User.Read" }; 
+        // Access our Backend API
+        string[] APIScopes = { "api://bce81670-6944-407a-9cdb-97094bfa655a/access_as_user" };
+
+
 
         /// <summary>
         /// RedirectUri also needs set on the info.plist on iOS and the AndroidManifest.xml on Android.
@@ -81,15 +87,16 @@ namespace AuthApp.Services
         {
             try
             {
-                // Hack for MSAL Tokens not storing on the simulator
-                // On a real device, we want to check the cache every time for the access token.
-                if(authResult != null && _simCheck.CheckIfSimulator())
+                //// Hack for MSAL Tokens not storing on the simulator
+                //// On a real device, we want to check the cache every time for the access token.
+                if (authResult != null && _simCheck.CheckIfSimulator())
                 {
                     return authResult.AccessToken;
                 }
 
                 // Attempt to perform silent authentication (i.e. use previous authentication/refresh token.
-                authResult = await PCA.AcquireTokenSilentAsync(Scopes, PCA.Users.FirstOrDefault());
+                authResult = await PCA.AcquireTokenSilentAsync(GraphScopes, PCA.Users.FirstOrDefault());
+                //authResultScope = scope;
 
                 AuthenticationChanged?.Invoke(authResult.AccessToken);
 
@@ -105,7 +112,8 @@ namespace AuthApp.Services
                     try
                     {
                         // Attempt to perform an interactive login.
-                        authResult = await PCA.AcquireTokenAsync(Scopes, UiParent);
+                        authResult = await PCA.AcquireTokenAsync(GraphScopes, UiParent);
+                        //authResultScope = scope;
 
                         AuthenticationChanged?.Invoke(authResult.AccessToken);
 
