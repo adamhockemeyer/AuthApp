@@ -94,6 +94,17 @@ namespace AuthApp.API.Tasks
                     CreatorId = Guid.NewGuid().ToString(),
                     CreatorName = "Laura Holdenly"
 
+                },
+                new TaskItem{
+                    Id = Guid.NewGuid().ToString(),
+                    Title = "Replace Legacy Laptops zzz",
+                    Description = "Provision new laptops for users with laptops older than 4 years.",
+                    Type = "Infrastructure",
+                    CreatedOn = DateTime.Now,
+                    CompletedOn = null,
+                    CreatorId = Guid.NewGuid().ToString(),
+                    CreatorName = "Laura Holdenly"
+
                 }
             };
 
