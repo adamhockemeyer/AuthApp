@@ -9,7 +9,7 @@ using AuthApp.Services.Data;
 
 namespace AuthApp.ViewModels
 {
-    public class TasksViewModel : BaseViewModel
+    public class ApprovalsViewModel : BaseViewModel
     {
         TasksDataService _dataService;
 
@@ -28,7 +28,7 @@ namespace AuthApp.ViewModels
         }
 
 
-        public TasksViewModel(TasksDataService dataService)
+        public ApprovalsViewModel(TasksDataService dataService)
         {
             _dataService = dataService;
 

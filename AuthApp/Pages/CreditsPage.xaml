@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AuthApp.Pages.CreditsPage" xmlns:b="clr-namespace:AuthApp.Pages;assembly=AuthApp" xmlns:vm="clr-namespace:AuthApp.ViewModels;assembly=AuthApp" x:TypeArguments="vm:CreditsViewModel" xmlns:converters="clr-namespace:AuthApp.Converters;assembly=AuthApp" xmlns:views="clr-namespace:AuthApp.Views;assembly=AuthApp" Title="Credits">
+    <ContentPage.Content>
+        <ScrollView VerticalOptions="FillAndExpand">
+            <TableView Intent="Form" HasUnevenRows="true" VerticalOptions="FillAndExpand">
+                <TableRoot>
+                    <TableSection Title="Icon/Image Credits">
+                        <ViewCell>
+                            <WebView x:Name="webView" HeightRequest="350"  VerticalOptions="FillAndExpand">
+                                
+                            </WebView>
+                        </ViewCell>
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+        </ScrollView>
+    </ContentPage.Content>
+</b:BaseContentPage>

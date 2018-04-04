@@ -8,6 +8,7 @@ using UIKit;
 using Autofac.Core;
 using FFImageLoading.Forms.Touch;
 using FFImageLoading.Svg.Forms;
+using Plugin.VersionTracking;
 
 namespace AuthApp.iOS
 {
@@ -21,6 +22,8 @@ namespace AuthApp.iOS
             // FFImageLoading Init
             CachedImageRenderer.Init();
             var ignore = typeof(SvgCachedImage);
+
+            CrossVersionTracking.Current.Track();
 
             LoadApplication(new App(new IModule[] { new PlatformSpecificModule() }));
 

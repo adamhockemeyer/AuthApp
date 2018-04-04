@@ -14,6 +14,7 @@ using Xamarin.Forms;
 
 using FFImageLoading.Forms.Droid;
 using FFImageLoading.Svg.Forms;
+using Plugin.VersionTracking;
 
 using AuthApp.Services;
 
@@ -37,6 +38,8 @@ namespace AuthApp.Droid
             // FFImageLoading Init
             CachedImageRenderer.Init(true);
             var ignore = typeof(SvgCachedImage);
+
+            CrossVersionTracking.Current.Track();
 
             App app = new App(new IModule[] { new PlatformSpecificModule() });
 

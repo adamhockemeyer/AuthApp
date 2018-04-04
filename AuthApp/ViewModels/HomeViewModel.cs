@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 using AuthApp.Services;
-
+using AuthApp.Constants;
 
 namespace AuthApp.ViewModels
 {
@@ -50,7 +50,7 @@ namespace AuthApp.ViewModels
 
             SignInCommand = new Command(async () =>
             {
-                await _authService.GetToken(true);
+                await _authService.GetToken(Authentication.SCOPES_API,true);
             });
         }
 

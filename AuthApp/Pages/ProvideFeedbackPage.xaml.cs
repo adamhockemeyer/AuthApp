@@ -7,9 +7,9 @@ using AuthApp.ViewModels;
 
 namespace AuthApp.Pages
 {
-    public partial class TaskEntryPage : BaseContentPage<TaskEntryViewModel>
+    public partial class ProvideFeedbackPage : BaseContentPage<ProvideFeedbackViewModel>
     {
-        public TaskEntryPage()
+        public ProvideFeedbackPage()
         {
             InitializeComponent();
         }

@@ -70,9 +70,11 @@ namespace AuthApp.Services.Data
             try
             {
                 response = await HttpClient.GetAsync(endpoint);
+                System.Diagnostics.Debug.WriteLine(response);
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex);
                 Acr.UserDialogs.UserDialogs.Instance.Toast(ex.Message, TimeSpan.FromSeconds(3));
             }
 
@@ -83,12 +85,69 @@ namespace AuthApp.Services.Data
             {
                 string data = await response.Content.ReadAsStringAsync();
 
-                return JsonConvert.DeserializeObject<T>(data);
+                T result = default(T);
+
+                try
+                {
+                    result = JsonConvert.DeserializeObject<T>(data);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex);
+                }
+
+                return result;
             }
             else
             {
-
+                Acr.UserDialogs.UserDialogs.Instance.Toast("Unable to get data", TimeSpan.FromSeconds(3));
                 return default(T);
+            }
+
+        }
+
+        protected async Task<string> GetDataAsStringAsync(string endpoint)
+        {
+            if (!Plugin.Connectivity.CrossConnectivity.IsSupported || !Plugin.Connectivity.CrossConnectivity.Current.IsConnected)
+            {
+                Acr.UserDialogs.UserDialogs.Instance.Toast("No connectivity", TimeSpan.FromSeconds(3));
+                return string.Empty;
+            }
+
+            if (_showLoading)
+                Acr.UserDialogs.UserDialogs.Instance.ShowLoading(_loadingMessage);
+
+            HttpResponseMessage response = null;
+
+            try
+            {
+                response = await HttpClient.GetAsync(endpoint);
+                System.Diagnostics.Debug.WriteLine(response);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                Acr.UserDialogs.UserDialogs.Instance.Toast(ex.Message, TimeSpan.FromSeconds(3));
+            }
+
+            if (_showLoading)
+                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+
+            if (response != null && response.IsSuccessStatusCode)
+            {
+                string data = await response.Content.ReadAsStringAsync();
+
+                return data;
+            }
+            else if(response.StatusCode != System.Net.HttpStatusCode.Unauthorized)
+            {
+                Acr.UserDialogs.UserDialogs.Instance.Toast("Unable to get data", TimeSpan.FromSeconds(3));
+                System.Diagnostics.Debug.WriteLine(response.ReasonPhrase);
+                return string.Empty;
+            }
+            else
+            {
+                return string.Empty;
             }
 
         }

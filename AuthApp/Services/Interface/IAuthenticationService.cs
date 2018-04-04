@@ -5,21 +5,15 @@ namespace AuthApp.Services
 {
     public interface IAuthenticationService
     {
-        string Username { get; }
+        string Name { get; set; }
+        string UserId { get; set; }
+        event Action<string, string[]> AuthenticationChanged;
 
-        event Action<string> AuthenticationChanged;
-
-        Task<string> GetToken(bool signInIfSilentFails = false);
+        Task<string> GetToken(string[] Scopes, bool signInIfSilentFails = false);
         Task SignOut();
-        Task<UserProfile> GetUserProfileAsync();
     }
 
-    public class UserProfile
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string EmailAddress { get; set; }
-    }
+
 
     public enum TokenAccessScope
     {

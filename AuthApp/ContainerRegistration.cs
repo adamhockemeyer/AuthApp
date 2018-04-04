@@ -23,15 +23,18 @@ namespace AuthApp
             builder.RegisterType<AuthenticationService>().As<IAuthenticationService>().SingleInstance();
 
             builder.RegisterType<TasksDataService>();
+            builder.RegisterType<ProfileDataService>();
 
             // ViewModels
             builder.RegisterType<HomeViewModel>();
             builder.RegisterType<MasterViewModel>();
-            builder.RegisterType<TasksViewModel>();
+            builder.RegisterType<ApprovalsViewModel>();
             builder.RegisterType<SettingsViewModel>();
-            builder.RegisterType<TaskEntryViewModel>();
+            builder.RegisterType<AssetManagementViewModel>();
             builder.RegisterType<SearchViewModel>();
             builder.RegisterType<ReportIssueViewModel>();
+            builder.RegisterType<ProvideFeedbackViewModel>();
+            builder.RegisterType<CreditsViewModel>();
 
         }
     }

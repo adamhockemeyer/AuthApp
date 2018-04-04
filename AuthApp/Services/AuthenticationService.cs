@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json.Linq;
 
+using AuthApp.Constants;
+using System.Collections.Generic;
+
 namespace AuthApp.Services
 {
     /// <summary>
@@ -18,30 +21,17 @@ namespace AuthApp.Services
         ISimulatorCheck _simCheck;
 
         PublicClientApplication PCA;
-        /// <summary>
-        /// UIParent is required by Android only and ties the Auth flow to the current activity.
-        /// </summary>
+        // UIParent is required by Android only and ties the Auth flow to the current activity.
         UIParent UiParent;
-        AuthenticationResult authResult;
-        string[] authResultScope;
-        UserProfile userProfile;
-        // Register your app at: https://apps.dev.microsoft.com
-        // Then enter the ClientID/Application ID below.
-        string ClientID = "bce81670-6944-407a-9cdb-97094bfa655a";
-        // Access the Microsoft Graph
-        string[] GraphScopes = { "User.Read" }; 
-        // Access our Backend API
-        string[] APIScopes = { "api://bce81670-6944-407a-9cdb-97094bfa655a/access_as_user" };
 
+        // Cache for scopes and authentication result.
+        Dictionary<string[], AuthenticationResult> authResultForScopes = new Dictionary<string[], AuthenticationResult>();
 
+        // RedirectUri also needs set on the info.plist on iOS and the AndroidManifest.xml on Android.
+        string RedirectUri => $@"msal{Authentication.CLIENT_ID}://auth";
 
-        /// <summary>
-        /// RedirectUri also needs set on the info.plist on iOS and the AndroidManifest.xml on Android.
-        /// </summary>
-        /// <value>The redirect URI.</value>
-        string RedirectUri => $@"msal{ClientID}://auth";
-
-        HttpClient _httpClient;
+        public string Name { get; set; }
+        public string UserId { get; set; }
 
         public AuthenticationService() { }
 
@@ -51,10 +41,10 @@ namespace AuthApp.Services
             _simCheck = simCheck;
 
 
-            if(ClientID.Length != 36)
+            if(Authentication.CLIENT_ID.Length != 36)
             {
 
-                var exception = new AuthenticationServiceException("Please set the ClientID/Application ID in the AuthenticationService.cs file.  " +
+                var exception = new AuthenticationServiceException("Please set the ClientID/Application ID in the Constants/Authentication.cs file.  " +
                                                          "If you have not registered your app, please visit https://apps.dev.microsoft.com, " +
                                                          "and register a 'Native Application'");
 
@@ -63,42 +53,49 @@ namespace AuthApp.Services
                 throw exception;        
             }
 
-            PCA = new PublicClientApplication(ClientID) { RedirectUri = RedirectUri};
+            PCA = new PublicClientApplication(Authentication.CLIENT_ID) { RedirectUri = RedirectUri};
         }
 
         /// <summary>
         /// Username of the current user.
         /// </summary>
         /// <value>The username.</value>
-        public string Username => authResult?.User?.Name ?? string.Empty;
+        //public string Username => authResult?.User?.Name ?? string.Empty;
 
         /// <summary>
         /// Action that fires when the users authentication has changed.
         /// </summary>
         /// <value>The authentication changed.</value>
-        public event Action<string> AuthenticationChanged;
+        public event Action<string, string[]> AuthenticationChanged;
 
         /// <summary>
         /// Gets an access token for the current user.  Optionally if no token is available, we can prompt the user to sign in.
         /// </summary>
         /// <returns>The token.</returns>
         /// <param name="signInIfSilentFails">If set to <c>true</c> sign in if silent fails.</param>
-        public async Task<string> GetToken(bool signInIfSilentFails = false)
+        public async Task<string> GetToken(string[] Scopes, bool signInIfSilentFails = false)
         {
             try
             {
                 //// Hack for MSAL Tokens not storing on the simulator
                 //// On a real device, we want to check the cache every time for the access token.
-                if (authResult != null && _simCheck.CheckIfSimulator())
+                if (authResultForScopes.ContainsKey(Scopes) && _simCheck.CheckIfSimulator())
                 {
-                    return authResult.AccessToken;
+                    return authResultForScopes[Scopes].AccessToken;
                 }
 
                 // Attempt to perform silent authentication (i.e. use previous authentication/refresh token.
-                authResult = await PCA.AcquireTokenSilentAsync(GraphScopes, PCA.Users.FirstOrDefault());
-                //authResultScope = scope;
+                var authResult = await PCA.AcquireTokenSilentAsync(Scopes, PCA.Users.FirstOrDefault());
 
-                AuthenticationChanged?.Invoke(authResult.AccessToken);
+                authResultForScopes.Remove(Scopes);
+                authResultForScopes.Add(Scopes, authResult);
+
+                Name = authResult?.User?.Name;
+                UserId = authResult?.User?.DisplayableId;
+
+                await _logger.LogMessage($"Adding Scope(s): {String.Join(", ", Scopes)} to cache.", "Authentication");
+
+                AuthenticationChanged?.Invoke(authResult.AccessToken, Scopes);
 
                 return authResult.AccessToken;
             }
@@ -112,10 +109,17 @@ namespace AuthApp.Services
                     try
                     {
                         // Attempt to perform an interactive login.
-                        authResult = await PCA.AcquireTokenAsync(GraphScopes, UiParent);
-                        //authResultScope = scope;
+                        var authResult = await PCA.AcquireTokenAsync(Scopes, UiParent);
 
-                        AuthenticationChanged?.Invoke(authResult.AccessToken);
+                        authResultForScopes.Remove(Scopes);
+                        authResultForScopes.Add(Scopes, authResult);
+
+                        Name = authResult?.User?.Name;
+                        UserId = authResult?.User?.DisplayableId;
+
+                        await _logger.LogMessage($"Adding Scope(s): {String.Join(", ", Scopes)} to cache.", "Authentication");
+
+                        AuthenticationChanged?.Invoke(authResult.AccessToken, Scopes);
 
                         return authResult.AccessToken;
                     }
@@ -144,58 +148,12 @@ namespace AuthApp.Services
                 PCA.Remove(user);
             }
 
-            authResult = null;
+            Name = null;
+            UserId = null;
 
-            userProfile = null;
+            authResultForScopes.Clear();
 
-            AuthenticationChanged?.Invoke(null);
-        }
-
-        public async Task<UserProfile> GetUserProfileAsync()
-        {
-            UserProfile profile = userProfile;
-
-            if(profile != null)
-            {
-                return profile;
-            }
-
-            _httpClient = _httpClient ?? new HttpClient();
-
-            try
-            {
-                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/me");
-                message.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", await GetToken());
-                HttpResponseMessage response = await _httpClient.SendAsync(message);
-                string responseString = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    JObject user = JObject.Parse(responseString);
-
-                    profile = new UserProfile
-                    {
-                        Id = user["id"].ToString(),
-                        Name = user["displayName"].ToString(),
-                        EmailAddress = user["mail"].ToString()
-                    };
-                }
-                else
-                {
-                    await _logger.LogException(new Exception(response.ReasonPhrase)).ConfigureAwait(false);
-                    await _logger.LogMessage("Unable to get user profile.", "Authentication").ConfigureAwait(false);
-
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogException(ex).ConfigureAwait(false);
-                await _logger.LogMessage("Unable to get user profile.", "Authentication").ConfigureAwait(false);
-            }
-
-
-
-            return profile;
+            AuthenticationChanged?.Invoke(null, null);
         }
 
         public AuthenticationService SetUIParent(UIParent uiParent)
@@ -204,8 +162,6 @@ namespace AuthApp.Services
 
             return this;
         }
-
-
     }
 
     /// <summary>

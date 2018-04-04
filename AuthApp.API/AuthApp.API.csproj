@@ -19,6 +19,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Approvals\Approvals.json" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -29,8 +32,12 @@
   <ItemGroup>
     <Folder Include="Tasks\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Approvals\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AuthApp.Common\AuthApp.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Approvals\Approvals.json" />
   </ItemGroup>
 </Project>

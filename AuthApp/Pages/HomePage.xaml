@@ -3,10 +3,26 @@
     <ContentPage.Content>
         <AbsoluteLayout>
             <!-- Background Image -->
-           <Image AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,.2,1,.5" Opacity="0.3" Source="{imageResource:ImageResource AuthApp.Resources.Images.cartography.png}" VerticalOptions="CenterAndExpand"  Aspect="AspectFit" />
-           <!-- Logo/Header -->
+            <Image AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,.2,1,.5" Opacity="0.3" Source="{imageResource:ImageResource AuthApp.Resources.Images.cartography.png}" VerticalOptions="CenterAndExpand" Aspect="AspectFit" />
+            <!-- Logo/Header -->
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,.2" VerticalOptions="FillAndExpand" Spacing="0">
-                <views:SVGImage Source="resource://AuthApp.Resources.Images.generic_logo.svg" WidthRequest="100" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="6*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <views:SVGImage Grid.Row="0" Grid.Column="0" Source="resource://AuthApp.Resources.Images.hamburger.svg" Color="{StaticResource orangeColor}" HorizontalOptions="Center" WidthRequest="14">
+                        <views:SVGImage.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnToggleMenuTapped" />
+                        </views:SVGImage.GestureRecognizers>
+                    </views:SVGImage>
+                    <views:SVGImage Grid.Row="0" Grid.Column="1" Source="resource://AuthApp.Resources.Images.generic_logo.svg" WidthRequest="100" />
+                </Grid>
+
                 <StackLayout Margin="0,20,0,20" Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="5" Spacing="0">
                     <ContentView BackgroundColor="{StaticResource orangeColor}" HorizontalOptions="FillAndExpand" />
                     <ContentView BackgroundColor="{StaticResource darkGrayColor}" HorizontalOptions="FillAndExpand" />
@@ -28,11 +44,11 @@
                         <!-- Approvals -->
                         <Frame Grid.Row="0" Grid.Column="0" CornerRadius="5" HasShadow="false" BackgroundColor="#107896">
                             <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding OnPageSelectedCommand}" CommandParameter="TasksPage" />
+                                <TapGestureRecognizer Command="{Binding OnPageSelectedCommand}" CommandParameter="ApprovalsPage" />
                             </Frame.GestureRecognizers>
                             <StackLayout VerticalOptions="FillAndExpand">
                                 <views:SVGImage Source="resource://AuthApp.Resources.Images.tasks.svg" WidthRequest="30" Color="White" />
-                                <Label Text="Tasks" TextColor="White" HorizontalTextAlignment="Center" />
+                                <Label Text="Approvals" TextColor="White" HorizontalTextAlignment="Center" />
                             </StackLayout>
                         </Frame>
                         <!-- Search -->
@@ -48,11 +64,11 @@
                         <!-- Order Entry -->
                         <Frame Grid.Row="1" Grid.Column="0" CornerRadius="5" HasShadow="false" BackgroundColor="#829356">
                             <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding OnPageSelectedCommand}" CommandParameter="TaskEntryPage" />
+                                <TapGestureRecognizer Command="{Binding OnPageSelectedCommand}" CommandParameter="AssetManagementPage" />
                             </Frame.GestureRecognizers>
                             <StackLayout VerticalOptions="FillAndExpand">
                                 <views:SVGImage Source="resource://AuthApp.Resources.Images.pencil_writing.svg" WidthRequest="30" Color="White" />
-                                <Label Text="Task Entry" TextColor="White" HorizontalTextAlignment="Center" />
+                                <Label Text="Asset Management" TextColor="White" HorizontalTextAlignment="Center" />
                             </StackLayout>
                         </Frame>
                         <!-- Report Issue -->

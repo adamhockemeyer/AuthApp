@@ -17,5 +17,13 @@ namespace AuthApp.Pages
             Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
         }
 
+        public void OnToggleMenuTapped(object sender, EventArgs args)
+        {
+            //Navigation.
+            if(Application.Current.MainPage is MasterDetailPage)
+            {
+                ((MasterDetailPage)Application.Current.MainPage).IsPresented = !((MasterDetailPage)Application.Current.MainPage).IsPresented;
+            }
+        }
 	}
 }

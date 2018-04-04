@@ -7,9 +7,9 @@ using AuthApp.ViewModels;
 
 namespace AuthApp.Pages
 {
-    public partial class TasksPage : BaseContentPage<TasksViewModel>
+    public partial class ApprovalsPage : BaseContentPage<ApprovalsViewModel>
     {
-        public TasksPage()
+        public ApprovalsPage()
         {
             InitializeComponent();
 

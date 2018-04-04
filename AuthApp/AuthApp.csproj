@@ -14,6 +14,7 @@
     <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
     <PackageReference Include="libphonenumber-csharp" Version="8.9.2" />
     <PackageReference Include="Xam.Plugin.Connectivity" Version="3.1.1" />
+    <PackageReference Include="Plugin.VersionTracking" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\" />
@@ -42,7 +43,7 @@
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\TasksPage.xaml.cs">
-      <DependentUpon>TaskPage.xaml</DependentUpon>
+      <DependentUpon>ApprovalsPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -54,7 +55,16 @@
       <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\TaskEntryPage.xaml.cs">
-      <DependentUpon>TaskEntryPage.xaml</DependentUpon>
+      <DependentUpon>AssetManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\CreditsPage.xaml.cs">
+      <DependentUpon>CreditsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Pages\ApprovalsPage.xaml.cs">
+      <DependentUpon>ApprovalsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Pages\AssetManagementPage.cs">
+      <DependentUpon>AssetManagementPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +79,10 @@
     <None Remove="Resources\Images\warning.svg" />
     <None Remove="Resources\Images\cartography.svg" />
     <None Remove="Resources\Images\cartography.png" />
+    <None Remove="Resources\Images\hamburger.svg" />
+    <None Remove="Resources\Images\left.svg" />
+    <None Remove="Resources\Images\right.svg" />
+    <None Remove="Resources\Images\Credits.html" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Images\home.svg" />
@@ -80,6 +94,10 @@
     <EmbeddedResource Include="Resources\Images\pencil_writing.svg" />
     <EmbeddedResource Include="Resources\Images\warning.svg" />
     <EmbeddedResource Include="Resources\Images\cartography.png" />
+    <EmbeddedResource Include="Resources\Images\hamburger.svg" />
+    <EmbeddedResource Include="Resources\Images\left.svg" />
+    <EmbeddedResource Include="Resources\Images\right.svg" />
+    <EmbeddedResource Include="Resources\Images\Credits.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AuthApp.Common\AuthApp.Common.csproj" />

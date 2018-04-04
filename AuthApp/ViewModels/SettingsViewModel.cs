@@ -3,22 +3,25 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 
+using AuthApp.Constants;
 using AuthApp.Services;
 
+using Plugin.VersionTracking;
 
 namespace AuthApp.ViewModels
 {
     public class SettingsViewModel : BaseViewModel
     {
+        INavigationService _navService;
         IAuthenticationService _authService;
 
         const string SIGNIN_TEXT = "Sign In";
         const string SIGNOUT_TEXT = "Sign Out";
-        const string SIGNIN_COLOR = "";
+        const string SIGNIN_COLOR = "#3A93CF";
         const string SIGNOUT_COLOR = "#FF0000";
 
         string _name;
-        public string Name 
+        public string Name
         {
             get => _name;
             set => SetProperty(ref _name, value);
@@ -45,6 +48,14 @@ namespace AuthApp.ViewModels
             set => SetProperty(ref _signInOutTextColor, value);
         }
 
+        string _appVersion;
+        public string AppVersion
+        {
+            get => _appVersion;
+            private set => SetProperty(ref _appVersion, value);
+        }
+
+
         Command _signInOutCommand;
         public Command SignInOutCommand
         {
@@ -52,65 +63,68 @@ namespace AuthApp.ViewModels
             set => SetProperty(ref _signInOutCommand, value);
         }
 
-        public SettingsViewModel(IAuthenticationService authService)
+        Command _onPageSelectedCommand;
+        public Command OnPageSelectedCommand
         {
+            get => _onPageSelectedCommand;
+            set => SetProperty(ref _onPageSelectedCommand, value);
+        }
+
+        public SettingsViewModel(INavigationService navService, IAuthenticationService authService)
+        {
+            _navService = navService;
             _authService = authService;
 
             InitCommands();
 
+            AppVersion = $"{CrossVersionTracking.Current.CurrentVersion} ({CrossVersionTracking.Current.CurrentBuild})";
+
             // Get initial token/profile state.
-            Task.Run(async () =>
-            {
-                var token = await _authService.GetToken();
-
-                ToggleSignInStatus(token);
-
-                var profile = await _authService.GetUserProfileAsync();
-
-                ToggleProfileInfo(profile);
-
-            });
+            ToggleSignInStatus();
+            ToggleProfileInfo();
 
             _authService.AuthenticationChanged += AuthChanged;
         }
 
         void InitCommands()
         {
+            // Handles when a page should be navigated to.
+            OnPageSelectedCommand = new Command(async (pageName) =>
+            {
+                // Navigate to the page selected.
+                await _navService.NavigateAsync(pageName.ToString());
+
+            });
+
             SignInOutCommand = new Command(async () =>
             {
-                var token = await _authService.GetToken();
+                var token = await _authService.GetToken(Authentication.SCOPES_API);
 
                 if (string.IsNullOrEmpty(token))
                 {
-                    token = await _authService.GetToken(true);
+                    token = await _authService.GetToken(Authentication.SCOPES_API, true);
                 }
                 else
                 {
                     await _authService.SignOut();
                     // Token should be null/empty; but getting it just to keep the UI in sync with the values.
-                    token = await _authService.GetToken();
+                    token = await _authService.GetToken(Authentication.SCOPES_API);
                 }
 
-                ToggleSignInStatus(token);
-
+                ToggleSignInStatus();
             });
         }
 
-        private void AuthChanged(string token)
+        private void AuthChanged(string token, string[] scopes)
         {
-            ToggleSignInStatus(token);
+            ToggleSignInStatus();
 
-            Task.Run(async () =>
-            {
-                var profile = await _authService.GetUserProfileAsync();
+            ToggleProfileInfo();
+         }
 
-                ToggleProfileInfo(profile);
-            });
-        }
-
-        void ToggleSignInStatus(string token)
+        void ToggleSignInStatus()
         {
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(_authService.UserId))
             {
                 SignInOutText = SIGNIN_TEXT;
                 SignInOutTextColor = SIGNIN_COLOR;
@@ -122,18 +136,10 @@ namespace AuthApp.ViewModels
             }
         }
 
-        private void ToggleProfileInfo(UserProfile profile)
+        private void ToggleProfileInfo()
         {
-            if(profile == null)
-            {
-                Name = null;
-                Email = null;
-            }
-            else
-            {
-                Name = profile.Name;
-                Email = profile.EmailAddress;
-            }
+            Name = _authService?.Name;
+            Email = _authService?.UserId;
         }
     }
 }

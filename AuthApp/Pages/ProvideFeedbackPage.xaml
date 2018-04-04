@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AuthApp.Pages.ProvideFeedbackPage" xmlns:b="clr-namespace:AuthApp.Pages;assembly=AuthApp" xmlns:vm="clr-namespace:AuthApp.ViewModels;assembly=AuthApp" x:TypeArguments="vm:ProvideFeedbackViewModel" Title="Feedback">
+    <ContentPage.Content>
+        <ScrollView VerticalOptions="FillAndExpand" Orientation="Vertical">
+            <TableView Intent="Form" HasUnevenRows="true">
+                <TableRoot>
+                    <TableSection Title="About You">
+                        <EntryCell Label="Name" Text="{Binding Name}" IsEnabled="{Binding IsNameFieldEnabled}" Placeholder="Your Name" />
+                        <EntryCell Label="Email" Text="{Binding Email}" IsEnabled="{Binding IsEmailFieldEnabled}" Placeholder="Your Email" />
+                    </TableSection>
+                    <TableSection Title="What do you like?">
+                        <ViewCell>
+                            <Editor Margin="5" HeightRequest="150" Text="{Binding PositiveFeedback}" />
+                        </ViewCell>
+                    </TableSection>
+                    <TableSection Title="What can we fix?">
+                        <ViewCell>
+                            <Editor Margin="5" HeightRequest="150" Text="{Binding NegativeFeedback}" />
+                        </ViewCell>
+                    </TableSection>
+                    <TableSection>
+                        <ViewCell>
+                            <Button BackgroundColor="{StaticResource blueColor}" Text="Submit Feedback" TextColor="White" Command="{Binding SubmitFeedbackCommand}" BorderRadius="0" />
+                        </ViewCell>
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+        </ScrollView>
+    </ContentPage.Content>
+</b:BaseContentPage>

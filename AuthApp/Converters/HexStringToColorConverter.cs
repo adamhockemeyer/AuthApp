@@ -12,9 +12,10 @@ namespace AuthApp.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string valueAsString = value.ToString();
+            string valueAsString = value?.ToString();
             switch (valueAsString)
             {
+                case (null):
                 case (""):
                     {
                         return Color.Default;

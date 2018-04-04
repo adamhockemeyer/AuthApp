@@ -8,11 +8,14 @@ namespace AuthApp.Services.Data
 {
     public class TasksDataService : BaseDataService
     {
-        IAuthenticationService _authService;
+        readonly IAuthenticationService _authService;
+        readonly string[] _authScope;
 
         public TasksDataService(IAuthenticationService authService)
         {
             _authService = authService;
+
+            _authScope = Authentication.SCOPES_API;
 
             SetBaseAddress(DataServices.BASE_URL);
             SetHeaderValue("x-functions-key", DataServices.FUNCTION_AUTHENTICATION_KEY);
@@ -21,7 +24,7 @@ namespace AuthApp.Services.Data
 
         public async Task<List<TaskItem>> GetTasksAsync()
         {
-            SetBearerToken(await _authService.GetToken());
+            SetBearerToken(await _authService.GetToken(_authScope, true));
 
             return await base.GetDataAsync<List<TaskItem>>("v1/Tasks");
         }

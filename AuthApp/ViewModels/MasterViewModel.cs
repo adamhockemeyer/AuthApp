@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using AuthApp.Constants;
 using AuthApp.Models;
 using AuthApp.Pages;
 using AuthApp.Services;
+using AuthApp.Services.Data;
 
 namespace AuthApp.ViewModels
 {
     public class MasterViewModel : BaseViewModel
     {
         IAuthenticationService _authService;
+
+        ProfileDataService _profileService;
 
         MasterPageItem _selectedItem;
         public MasterPageItem SelectedItem
@@ -27,11 +31,13 @@ namespace AuthApp.ViewModels
 
         public ObservableCollection<MasterPageItem> MenuItems { get; set; }
 
-        public MasterViewModel(IAuthenticationService authService)
+        public MasterViewModel(IAuthenticationService authService, ProfileDataService profileService)
         {
             _authService = authService;
 
             _authService.AuthenticationChanged += OnAuthenticationChanged;
+
+            _profileService = profileService;
 
             MenuItems = new ObservableCollection<MasterPageItem>();
 
@@ -53,18 +59,18 @@ namespace AuthApp.ViewModels
 
             MenuItems.Add(new MasterPageItem
             {
-                Title = "Tasks",
+                Title = "Approvals",
                 IconName = "resource://AuthApp.Resources.Images.tasks.svg",
                 Active = false,
-                TargetType = typeof(TasksPage)
+                TargetType = typeof(ApprovalsPage)
             });
 
             MenuItems.Add(new MasterPageItem
             {
-                Title = "Task Entry",
+                Title = "Asset Management",
                 IconName = "resource://AuthApp.Resources.Images.pencil_writing.svg",
                 Active = false,
-                TargetType = typeof(TaskEntryPage)
+                TargetType = typeof(AssetManagementPage)
             });
 
             MenuItems.Add(new MasterPageItem
@@ -84,18 +90,9 @@ namespace AuthApp.ViewModels
             });
         }
 
-        private void OnAuthenticationChanged(string accessToken)
+        private void OnAuthenticationChanged(string accessToken, string[] scopes)
         {
-
-            Task.Run(async () =>
-            {
-                var profile = await _authService.GetUserProfileAsync();
-
-                if(profile != null)
-                {
-                    Name = profile.Name;
-                }
-            });
+            Name = string.IsNullOrEmpty(accessToken) ? null : _authService.Name;
         }
     }
 }
