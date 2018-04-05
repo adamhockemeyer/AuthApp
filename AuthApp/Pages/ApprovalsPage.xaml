@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<b:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AuthApp.Pages.ApprovalsPage" xmlns:b="clr-namespace:AuthApp.Pages;assembly=AuthApp" xmlns:vm="clr-namespace:AuthApp.ViewModels;assembly=AuthApp" x:TypeArguments="vm:ApprovalsViewModel" Title="Approvals">
+<b:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AuthApp.Pages.ApprovalsPage" xmlns:b="clr-namespace:AuthApp.Pages;assembly=AuthApp" xmlns:vm="clr-namespace:AuthApp.ViewModels;assembly=AuthApp" x:TypeArguments="vm:ApprovalsViewModel" xmlns:views="clr-namespace:AuthApp.Views;assembly=AuthApp" Title="Approvals">
     <ContentPage.Content>
         <StackLayout>
-            <ListView HasUnevenRows="true" ItemsSource="{Binding Tasks}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+            <ListView HasUnevenRows="true" IsGroupingEnabled="true" CachingStrategy="RecycleElement" SeparatorVisibility="None" ItemsSource="{Binding Approvals}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Label Text="{Binding HeadingWithCount}" FontSize="14" VerticalTextAlignment="Center" Margin="5,0,0,0" />
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="0,5,0,15">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding Title}" />
-                            </Grid>
+                            <ContentView BackgroundColor="{StaticResource lightGrayColor}" Padding="10">
+                                <Grid BackgroundColor="White">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="30" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="35" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout Grid.Row="0" Grid.ColumnSpan="5" HorizontalOptions="FillAndExpand" Orientation="Horizontal" Padding="5" BackgroundColor="{StaticResource blueColor}">
+                                        <Label HorizontalTextAlignment="Start" VerticalTextAlignment="Center" Text="{Binding Title}" FontAttributes="Bold" TextColor="White" FontSize="14" />
+                                        <Label HorizontalOptions="EndAndExpand" VerticalTextAlignment="Center" Text="{Binding Id, StringFormat='Approval #: {0:N0}'}" TextColor="White" FontSize="10" />
+                                    </StackLayout>
+                                    <Label Grid.Row="1" Grid.ColumnSpan="4" Text="{Binding Description}" Margin="5" HeightRequest="50" FontSize="12" LineBreakMode="WordWrap" />
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding Createdby, StringFormat='Creator: {0}'}" FontAttributes="Italic" FontSize="10" />
+                                    <Label Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" HorizontalTextAlignment="End" Text="{Binding Createdon, StringFormat='Submitted: {0:MM/dd/yy}'}" FontAttributes="Italic" FontSize="10" />
+                                    <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HeightRequest="30" Text="{Binding EstimateAmount, StringFormat='Value: {0:C}'}" TextColor="{StaticResource blueColor}" FontAttributes="Bold" FontSize="14" />
+                                    <views:SVGImage Grid.Row="1" Grid.RowSpan="3" Grid.Column="4" Source="resource://AuthApp.Resources.Images.right.svg" Margin="10,0,10,0" HeightRequest="30" Color="Gray" />
+                                </Grid>
+                            </ContentView>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

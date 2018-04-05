@@ -22,19 +22,21 @@ namespace AuthApp
             builder.RegisterType<LoggerService>().As<ILoggerService>().SingleInstance();
             builder.RegisterType<AuthenticationService>().As<IAuthenticationService>().SingleInstance();
 
-            builder.RegisterType<TasksDataService>();
+            builder.RegisterType<ApprovalsDataService>();
             builder.RegisterType<ProfileDataService>();
 
             // ViewModels
             builder.RegisterType<HomeViewModel>();
             builder.RegisterType<MasterViewModel>();
             builder.RegisterType<ApprovalsViewModel>();
+            builder.RegisterType<ApprovalDetailViewModel>();
             builder.RegisterType<SettingsViewModel>();
             builder.RegisterType<AssetManagementViewModel>();
             builder.RegisterType<SearchViewModel>();
             builder.RegisterType<ReportIssueViewModel>();
             builder.RegisterType<ProvideFeedbackViewModel>();
             builder.RegisterType<CreditsViewModel>();
+
 
         }
     }

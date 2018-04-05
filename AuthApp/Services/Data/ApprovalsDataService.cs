@@ -6,12 +6,12 @@ using AuthApp.Constants;
 
 namespace AuthApp.Services.Data
 {
-    public class TasksDataService : BaseDataService
+    public class ApprovalsDataService : BaseDataService
     {
         readonly IAuthenticationService _authService;
         readonly string[] _authScope;
 
-        public TasksDataService(IAuthenticationService authService)
+        public ApprovalsDataService(IAuthenticationService authService)
         {
             _authService = authService;
 
@@ -22,11 +22,11 @@ namespace AuthApp.Services.Data
             ShowLoadingMessage(true);
         }
 
-        public async Task<List<TaskItem>> GetTasksAsync()
+        public async Task<List<Approval>> GetApprovalsAsync()
         {
             SetBearerToken(await _authService.GetToken(_authScope, true));
 
-            return await base.GetDataAsync<List<TaskItem>>("v1/Tasks");
+            return await base.GetDataAsync<List<Approval>>("v1/Approvals");
         }
     }
 }

@@ -5,48 +5,89 @@ using Xamarin.Forms;
 
 using AuthApp.Common.Models;
 using AuthApp.Services.Data;
-
+using AuthApp.Models;
+using System.Linq;
+using AuthApp.Services;
 
 namespace AuthApp.ViewModels
 {
     public class ApprovalsViewModel : BaseViewModel
     {
-        TasksDataService _dataService;
+        INavigationService _navService;
+        ApprovalsDataService _dataService;
 
-        ObservableCollection<TaskItem> _tasks;
-        public ObservableCollection<TaskItem> Tasks
+        event Action<Approval> OnSelectedItem;
+
+        ObservableCollection<GroupedList<Approval>> _approvals;
+        public ObservableCollection<GroupedList<Approval>> Approvals
         {
-            get => _tasks;
-            set => SetProperty(ref _tasks, value);
+            get => _approvals;
+            set => SetProperty(ref _approvals, value);
         }
 
-        Command _getTasksCommand;
-        public Command GetTasksCommand
+        Approval _selectedItem;
+        public Approval SelectedItem
         {
-            get => _getTasksCommand;
-            set => SetProperty(ref _getTasksCommand, value);
+            get => _selectedItem;
+            set  
+            { 
+                SetProperty(ref _selectedItem, value);
+                if(value != null)
+                {
+                    OnSelectedItem?.Invoke(value);
+                }
+
+            }
+        }
+
+        Command _getApprovalsCommand;
+        public Command GetApprovalsCommand
+        {
+            get => _getApprovalsCommand;
+            set => SetProperty(ref _getApprovalsCommand, value);
         }
 
 
-        public ApprovalsViewModel(TasksDataService dataService)
+        public ApprovalsViewModel(ApprovalsDataService dataService, INavigationService navService)
         {
             _dataService = dataService;
+            _navService = navService;
 
-            Tasks = new ObservableCollection<TaskItem>();
+            Approvals = new ObservableCollection<GroupedList<Approval>>();
 
             InitCommands();
 
-            // Load tasks 
-            GetTasksCommand.Execute(null);
+            // Load approvals 
+            GetApprovalsCommand.Execute(null);
+
+
+            OnSelectedItem += async (Approval selected) => {
+                if(selected != null)
+                {
+                    SelectedItem = null;
+                    await navService.NavigateAsync("ApprovalDetailPage", selected);
+                }
+            };
         }
 
         void InitCommands()
         {
-            GetTasksCommand = new Command(async () =>
+            GetApprovalsCommand = new Command(async () =>
             {
-                var data = await _dataService.GetTasksAsync();
+                var data = await _dataService.GetApprovalsAsync();
 
-                Tasks = new ObservableCollection<TaskItem>(data ?? new System.Collections.Generic.List<TaskItem>());
+                if(data != null && data.Any())
+                {
+                   var groupedApprovals = data.GroupBy(p => p.Category)
+                                              .OrderBy(p => p.Key)
+                                              .Select(p => new GroupedList<Approval>(p.ToList()) { Heading = p.Key });
+
+                    Approvals = new ObservableCollection<GroupedList<Approval>>(groupedApprovals);
+                }
+                else
+                {
+                    Approvals?.Clear();
+                }
             });
         }
     }
