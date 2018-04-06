@@ -17,7 +17,7 @@ using FFImageLoading.Svg.Forms;
 using Plugin.VersionTracking;
 
 using AuthApp.Services;
-
+using Acr.UserDialogs;
 
 namespace AuthApp.Droid
 {
@@ -41,14 +41,20 @@ namespace AuthApp.Droid
 
             CrossVersionTracking.Current.Track();
 
+            UserDialogs.Init(this);
+
             App app = new App(new IModule[] { new PlatformSpecificModule() });
 
             LoadApplication(app);
 
             // Set the UIParent for the MSAL Authentication Library.
             ((AuthenticationService)app.GetAuthenticationService).SetUIParent(new UIParent(this));
-
-
         }
-    }
+
+		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+		{
+            base.OnActivityResult(requestCode, resultCode, data);
+            AuthenticationContinuationHelper.SetAuthenticationContinuationEventArgs(requestCode, resultCode, data);
+		}
+	}
 }

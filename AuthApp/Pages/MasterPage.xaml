@@ -34,7 +34,7 @@
                                         <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
                                             <ContentView WidthRequest="3" BackgroundColor="{StaticResource orangeColor}" IsVisible="{Binding Active}" />
                                             <ContentView WidthRequest="3" BackgroundColor="Transparent" IsVisible="{Binding Active, Converter={StaticResource invertBoolean}}" />
-                                            <views:SVGImage Source="{Binding IconName}" Margin="10,0,10,0" WidthRequest="20" Color="{StaticResource blueColor}" />
+                                            <views:SVGImage Source="{Binding IconName}" Margin="10,0,10,0" WidthRequest="20" HeightRequest="20" Color="{StaticResource blueColor}" />
                                             <Label Text="{Binding Title}" FontSize="19" VerticalTextAlignment="Center" TextColor="{StaticResource darkGrayColor}" />
                                         </StackLayout>
                                     </ViewCell>

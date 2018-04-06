@@ -70,7 +70,6 @@ namespace AuthApp.Services.Data
             try
             {
                 response = await HttpClient.GetAsync(endpoint);
-                System.Diagnostics.Debug.WriteLine(response);
             }
             catch (Exception ex)
             {

@@ -3,16 +3,12 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="{Binding ApprovalDetail.Id, StringFormat='Approval # {0:N0}'}" HorizontalTextAlignment="Center" FontSize="30" Margin="10" FontAttributes="Bold" />
-            <Label Text="Title:" FontAttributes="Bold" />
-            <Label Text="{Binding ApprovalDetail.Title}" FontSize="14"/>
-            <Label Text="Description:" FontAttributes="Bold" />
+            <Label Text="{Binding ApprovalDetail.Title, StringFormat='Title: {0}'}" FontSize="14"/>
+            <Label Text="Description:" FontSize="14" />
             <Label Text="{Binding ApprovalDetail.Description}" FontSize="14"/>
-            <Label Text="Estimate Amount:" FontAttributes="Bold" />
-            <Label Text="{Binding ApprovalDetail.EstimateAmount, StringFormat='{0:C}'}" FontSize="14"/>
-            <Label Text="Created By:" FontAttributes="Bold" />
-            <Label Text="{Binding ApprovalDetail.Createdby}" FontSize="14"/>
-            <Label Text="Created On:" FontAttributes="Bold" />
-            <Label Text="{Binding ApprovalDetail.Createdon, StringFormat='{0:MM/dd/yyyy}'}" FontSize="14"/>
+            <Label Text="{Binding ApprovalDetail.EstimateAmount, StringFormat='Estimate Amount: {0:C}'}" FontSize="14"/>
+            <Label Text="{Binding ApprovalDetail.Createdby, StringFormat='Created By: {0}'}" FontSize="14"/>
+            <Label Text="{Binding ApprovalDetail.Createdon, StringFormat='Created On: {0:MM/dd/yyyy}'}" FontSize="14"/>
             <Label Text="Approval History" TextColor="White" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="FillAndExpand" Margin="0,10,0,10" HeightRequest="50" BackgroundColor="{StaticResource blueColor}" />
                 
             <ListView ItemsSource="{Binding ApprovalDetail.ApprovalHistory}" HasUnevenRows="true" SeparatorVisibility="None" BackgroundColor="Transparent">
