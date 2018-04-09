@@ -24,6 +24,7 @@ namespace AuthApp.API.Approvals
             TraceWriter log
         )
         {
+            // Call Backend
             var data = Helpers.ReadJsonFile.ReadJsonFileAs<List<Approval>>("Approvals.Approvals.json");
 
             return req.CreateResponse(System.Net.HttpStatusCode.OK, data);
